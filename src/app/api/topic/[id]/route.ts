@@ -27,9 +27,9 @@ export async function PUT(request: Request) {
     }
 }
 
-export async function DELETE(request: Request,
-  { params }: { params: { id: string } }) {
-   const {id} = params
+export async function DELETE(request: Request) {
+   const url = new URL(request.url);
+  const id = url.pathname.split("/").pop();
 
     if (!id) {
         return NextResponse.json({ message: "Topic ID is required" }, { status: 400 });
