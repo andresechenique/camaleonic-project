@@ -103,14 +103,14 @@ export default function Dashboard() {
         label: "Nº of Users",
         data: Object.values(cityCounts),
         backgroundColor: [
-          "#FF6384",
-          "#36A2EB",
-          "#FFCE56",
-          "#4BC0C0",
-          "#9966FF",
-          "#FF9F40",
-          "#E7E9ED",
-          "#7ED6DF",
+          "#3B82F6",
+          "#2563EB",
+          "#60A5FA",
+          "#0EA5E9",
+          "#06B6D4",
+          "#818CF8",
+          "#38BDF8",
+          "#1D4ED8",
         ],
         borderWidth: 0,
       },
@@ -145,8 +145,8 @@ export default function Dashboard() {
       {
         label: "Interest Points",
         data,
-        backgroundColor: "rgba(59, 130, 246, 0.5)", // Tailwind blue-500/50
-        borderColor: "rgba(59, 130, 246, 1)", // Tailwind blue-500
+        backgroundColor: "rgba(59, 130, 246, 0.5)",
+        borderColor: "rgba(59, 130, 246, 1)",
         borderWidth: 1,
       },
     ],
@@ -164,7 +164,7 @@ export default function Dashboard() {
       {
         label: "Todos",
         data: Object.values(todoStatusCounts),
-        backgroundColor: ["#FF6384", "#63ff6bff"],
+        backgroundColor: ["#06B6D4", "#1D4ED8"],
         borderWidth: 0,
       },
     ],
@@ -183,12 +183,13 @@ export default function Dashboard() {
 
   return (
     <div className="col-span-12 grid grid-cols-12 gap-4 p-4">
-      <div className="col-span-6 bg-gray-700 rounded-lg p-2 border border-gray-500">
+      <div className="col-span-12 md:col-span-6 bg-gray-700 rounded-lg p-2 border border-gray-500">
         <h2 className="p-2 text-xl">Users per city</h2>
-        <div className="max-h-80 flex justify-center">
+        <div className="max-h-80 flex justify-center py-4">
           <Doughnut
             data={dataUsers}
             options={{
+              maintainAspectRatio: false,
               cutout: "80%",
               plugins: {
                 legend: {
@@ -196,16 +197,19 @@ export default function Dashboard() {
                 },
               },
             }}
+            style={{ width: "100%", height: "100%" }}
           />
         </div>
       </div>
-      <div className="col-span-6 bg-gray-700 rounded-lg p-2 border border-gray-500">
-        <h2 className="p-2 text-xl">Post per user</h2>
-        <div className="flex justify-center">
+      <div className="col-span-12 md:col-span-6 bg-gray-700 rounded-lg p-2 border border-gray-500">
+        <h2 className="p-2 text-xl">Post over time</h2>
+        <div className="max-h-80 flex justify-center py-4">
           <Line
             data={dataPosts}
             options={{
               responsive: true,
+              maintainAspectRatio: false,
+
               plugins: {
                 legend: { display: false },
                 title: {
@@ -223,16 +227,19 @@ export default function Dashboard() {
                 },
               },
             }}
+            style={{ width: "100%", height: "100%" }}
           />
         </div>
       </div>
-      <div className="col-span-4 bg-gray-700 rounded-lg p-2 border border-gray-500">
-        <h2 className="p-2 text-xl">Comments per post</h2>
-        <div className="max-h-80 flex justify-center">
+      <div className="col-span-12 md:col-span-4 bg-gray-700 rounded-lg p-2 border border-gray-500">
+        <h2 className="p-2 text-xl">Topics with more interest</h2>
+        <div className="max-h-80 flex justify-center py-4">
           <Bar
             data={dataTopics}
             options={{
               responsive: true,
+              maintainAspectRatio: false,
+
               plugins: {
                 legend: { display: false },
                 title: { display: true, text: "Interest Points per Topic" },
@@ -251,42 +258,55 @@ export default function Dashboard() {
                 },
               },
             }}
+            style={{ width: "100%", height: "100%" }}
           />
         </div>
       </div>
-      <div className="col-span-4 bg-gray-700 rounded-lg p-2 border border-gray-500">
+      <div className="col-span-12 md:col-span-4 bg-gray-700 rounded-lg p-2 border border-gray-500 ">
         <h2 className="p-2 text-xl">Todo Completion %</h2>
-        <div className="max-h-80 flex justify-center">
+        <div className="min-h-[200px] flex justify-center py-4">
           <Doughnut
             data={dataTodos}
             options={{
-              cutout: "80%",
+              cutout: "60%",
+              maintainAspectRatio: false,
+
               plugins: {
                 legend: {
                   display: false,
                 },
               },
             }}
+            style={{ width: "100%", height: "100%" }}
           />
         </div>
       </div>
-      <div className="col-span-4 bg-gray-700 rounded-lg p-2 border border-gray-500">
-        <h2 className="p-2 text-xl">Posts per Album</h2>
-        <div className="grid grid-cols-2">
+      <div className="col-span-12 md:col-span-4 bg-gray-700 rounded-lg p-2 border border-gray-500">
+        <h2 className="p-2 text-xl mb-2">Posts per Album</h2>
+        <div className="grid grid-cols-2 gap-2 xl:4 py-4">
           {Object.entries(photosByAlbum)
             .slice(0, 4)
             .map(([albumId, photoArray]) => {
               return (
-                <div key={albumId} className="rounded-lg shadow-md p-4">
-                  <h3 className="font-semibold mb-2">Album {albumId}</h3>
-                  <div className="flex gap-2">
+                <div
+                  key={albumId}
+                  className="rounded-lg border border-gray-500 shadow-md p-2"
+                >
+                  <h3 className="font-semibold mb-2 text-center">
+                    Album {albumId}
+                  </h3>
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 justify-items-center">
                     {photoArray.slice(0, 4).map((photo) => (
-                      <img
+                      <div
                         key={photo.id}
-                        src={photo.url}
-                        alt={photo.title}
-                        className="w-16 h-16 object-cover rounded"
-                      />
+                        className="w-10 h-10 xl:w-14 xl:h-14 rounded overflow-hidden flex justify-items-center"
+                      >
+                        <img
+                          src={photo.url}
+                          alt={photo.title}
+                          className="w-full h-full object-cover rounded"
+                        />
+                      </div>
                     ))}
                   </div>
                 </div>
