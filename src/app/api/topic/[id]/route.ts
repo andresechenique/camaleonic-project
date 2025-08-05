@@ -2,19 +2,13 @@ import { connectDB } from "@/libs/mongodb";
 import Topic from "@/models/topics";
 import { NextResponse } from "next/server";
 
-import { NextRequest } from "next/server";
-
-export async function PUT(
-  request: NextRequest,
-  context: { params: { id: string } }
-) {
-   const {id} = context.params
+export async function PUT(request: Request) {
+    const { id, title, description, points } = await request.json();
 
     if (!id) {
         return NextResponse.json({ message: "Topic ID is required" }, { status: 400 });
     }
 
-    const { title, description, points } = await request.json();
 
     try {
         await connectDB();

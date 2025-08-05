@@ -74,7 +74,7 @@ export default function Topics() {
         Number(formData.get("points"))
       );
       setTopics((prev) =>
-        prev.map((topic) => (topic._id === id ? response.data : topic))
+        prev.map((topic) => (topic._id === id ? response : topic))
       );
       setOpenEditId(null);
     } catch (error) {

@@ -2,7 +2,6 @@
 import { useRouter, usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import clsx from "clsx";
-import Image from "next/image";
 
 export default function Nav() {
   const router = useRouter();
@@ -24,7 +23,7 @@ export default function Nav() {
 
   return (
     <div className="bg-black min-h-[64px] grid grid-cols-12 items-center text-center">
-      <Image
+      <img
         alt="logo"
         src={"https://camaleonicanalytics.com/assets/frontend/images/logo.png"}
         className="col-span-4 text-left pl-4 font-semibold text-lg max-h-[40px]"

@@ -16,6 +16,7 @@ async function createTopic(title: FormDataEntryValue | null, description: FormDa
 
 async function updateTopic(id: string, title: FormDataEntryValue | null, description: FormDataEntryValue | null, points: number) {
     const res = await axios.put(`/api/topic/${id}`, {
+        id,
         title,
         description,
         points
