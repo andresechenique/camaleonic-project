@@ -2,9 +2,13 @@ import { connectDB } from "@/libs/mongodb";
 import Topic from "@/models/topics";
 import { NextResponse } from "next/server";
 
-export async function PUT(request: Request,
-  { params }: { params: { id: string } }) {
-   const {id} = params
+import { NextRequest } from "next/server";
+
+export async function PUT(
+  request: NextRequest,
+  context: { params: { id: string } }
+) {
+   const {id} = context.params
 
     if (!id) {
         return NextResponse.json({ message: "Topic ID is required" }, { status: 400 });

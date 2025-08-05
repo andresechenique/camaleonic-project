@@ -16,6 +16,7 @@ import {
   PointElement,
   LineElement,
 } from "chart.js";
+import Image from "next/image";
 
 ChartJS.register(
   ArcElement,
@@ -301,7 +302,7 @@ export default function Dashboard() {
                         key={photo.id}
                         className="w-10 h-10 xl:w-14 xl:h-14 rounded overflow-hidden flex justify-items-center"
                       >
-                        <img
+                        <Image
                           src={photo.url}
                           alt={photo.title}
                           className="w-full h-full object-cover rounded"
