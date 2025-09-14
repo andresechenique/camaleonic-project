@@ -35,9 +35,11 @@ export async function GET(request: Request) {
 			filter.date = { $lte: end };
 		}
 
-		const matches = await Matches.find(filter).select(
-			'_id date team1 team2 scoreTeam1 scoreTeam2 competition favPlayer where rating',
-		);
+		const matches = await Matches.find(filter)
+			.select(
+				'_id date team1 team2 scoreTeam1 scoreTeam2 competition favPlayer where rating',
+			)
+			.sort({ date: -1 });
 		return NextResponse.json(matches);
 	} catch (error) {
 		console.error(error);

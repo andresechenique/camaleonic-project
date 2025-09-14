@@ -13,7 +13,7 @@ async function addMatch(params: AddMatchParams) {
 }
 
 async function updateMatch(params: Match) {
-	const res = await axios.put(`/api/matches/${params.id}`, params);
+	const res = await axios.put(`/api/matches/${params._id}`, params);
 	return res.data;
 }
 
@@ -22,9 +22,15 @@ async function deleteMatch(id: string) {
 	return res.data;
 }
 
+async function getTeams(competition?: string) {
+	const res = await axios.get(`/api/teams`);
+	return res.data;
+}
+
 export const MatchesService = {
 	getMatches,
 	addMatch,
 	updateMatch,
 	deleteMatch,
+	getTeams,
 };
