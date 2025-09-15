@@ -24,10 +24,10 @@ export default function Register() {
 			const res = await signIn('credentials', {
 				email: signUpRes.email,
 				password,
-				redirect: false,
+				redirect: true,
 			});
 
-			if (res?.ok) return router.push('/');
+			// if (res?.ok) return router.push('/');
 			setError('Authentication failed.');
 		} catch (error) {
 			if (error instanceof AxiosError) {
