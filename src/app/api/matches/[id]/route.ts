@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 
 export async function PUT(request: Request) {
 	const {
-		id,
+		_id,
 		date,
 		team1,
 		team2,
@@ -16,7 +16,7 @@ export async function PUT(request: Request) {
 		rating,
 	} = await request.json();
 
-	if (!id) {
+	if (!_id) {
 		return NextResponse.json(
 			{ message: 'Match ID is required' },
 			{ status: 400 },
@@ -26,7 +26,7 @@ export async function PUT(request: Request) {
 	try {
 		await connectDB();
 		const updatedMatch = await Match.findByIdAndUpdate(
-			id,
+			_id,
 			{
 				date,
 				team1,

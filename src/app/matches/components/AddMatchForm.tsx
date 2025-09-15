@@ -1,43 +1,74 @@
 import {
 	Dialog,
 	DialogContent,
-	DialogDescription,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
 } from '@/components/ui/dialog';
-import { Team } from '@/interfaces';
-import { FormEvent, useState } from 'react';
+import { Match, Team } from '@/interfaces';
+import {
+	Dispatch,
+	FormEvent,
+	SetStateAction,
+	useEffect,
+	useState,
+} from 'react';
 
 interface AddMatchForm {
 	teams: Team[];
 	error?: string;
 	addMatch: (e: FormEvent<HTMLFormElement>) => void;
+	editMatch: (e: FormEvent<HTMLFormElement>) => void;
+	match?: Match;
+	setIsOpen: Dispatch<SetStateAction<boolean>>;
+	isOpen: boolean;
+	handleClose: () => void;
 }
 
-export const AddMatchForm = ({ teams, error, addMatch }: AddMatchForm) => {
+export const AddMatchForm = ({
+	teams,
+	error,
+	addMatch,
+	match,
+	editMatch,
+	setIsOpen,
+	isOpen,
+	handleClose,
+}: AddMatchForm) => {
 	const [competitionSelected, setCompetitionSelected] = useState<string>();
 
+	useEffect(() => {
+		if (!match) return;
+		setIsOpen(true);
+	}, [match]);
+
 	return (
-		<Dialog>
-			<DialogTrigger className="bg-blue-600 text-white p-2 rounded-xl hover:bg-blue-700 transition">
+		<Dialog open={isOpen} onOpenChange={handleClose}>
+			<DialogTrigger className="bg-blue-600 text-white p-3 rounded hover:bg-blue-700 transition">
 				Add match
 			</DialogTrigger>
-			<DialogContent className="bg-gray-800 text-white max-w-3xl">
+			<DialogContent className="bg-gray-800 text-white max-w-xs  md:max-w-2xl">
 				<DialogHeader>
-					<DialogTitle>Add new topic</DialogTitle>
-					<form className="flex flex-col gap-4" onSubmit={addMatch}>
+					<DialogTitle>{match ? 'Edit match' : 'Add match'}</DialogTitle>
+					<form
+						className="flex flex-col gap-4"
+						onSubmit={match ? editMatch : addMatch}
+					>
 						<input
 							type="date"
 							placeholder="Date"
-							defaultValue={new Date().toISOString().split('T')[0]}
+							defaultValue={
+								match?.date
+									? new Date(match.date).toISOString().split('T')[0]
+									: new Date().toISOString().split('T')[0]
+							}
 							name="date"
 							className="bg-gray-700 rounded-lg p-3 placeholder-white"
 						/>
 						<select
 							name="competition"
 							className="bg-gray-700 rounded-lg p-3 text-white"
-							defaultValue=""
+							defaultValue={match ? match.competition : ''}
 							onChange={(e) => setCompetitionSelected(e.target.value)}
 						>
 							<option value="" disabled>
@@ -49,52 +80,62 @@ export const AddMatchForm = ({ teams, error, addMatch }: AddMatchForm) => {
 							<option value="premier">Premier League</option>
 						</select>
 
-						<div className="flex gap-4 justify-between items-center">
+						<div className="flex gap-4 flex-col md:flex-row justify-between items-center">
 							<select
-								defaultValue=""
+								defaultValue={match ? match?.team1 : ''}
 								name="team1"
-								className="bg-gray-700 rounded-lg p-3 placeholder-white"
+								className="bg-gray-700 rounded-lg p-3 placeholder-white w-full"
 							>
 								<option value="" disabled>
 									Home Team
 								</option>
 								{teams
-									.filter((team) => team.competition === competitionSelected)
+									.filter((team) =>
+										match
+											? team.competition === match.competition
+											: team.competition === competitionSelected,
+									)
 									.map((team) => (
-										<option key={team._id} value={team.team}>
+										<option key={team.team} value={team.team}>
 											{team.team}
 										</option>
 									))}
 							</select>
+							<div className="flex items-center justify-around w-full md:w-auto gap-2">
+								<input
+									defaultValue={match ? match?.scoreTeam1 : 0}
+									type="number"
+									placeholder="0"
+									name="scoreTeam1"
+									className="bg-gray-700 rounded-lg p-3 placeholder-white w-14"
+								/>
 
-							<input
-								type="number"
-								placeholder="Score"
-								name="scoreTeam1"
-								className="bg-gray-700 rounded-lg p-3 placeholder-white max-w-20"
-							/>
+								<p>VS.</p>
 
-							<p>VS.</p>
-
-							<input
-								type="number"
-								placeholder="Score"
-								name="scoreTeam2"
-								className="bg-gray-700 rounded-lg p-3 placeholder-white max-w-20"
-							/>
-
+								<input
+									defaultValue={match ? match?.scoreTeam2 : 0}
+									type="number"
+									placeholder="0"
+									name="scoreTeam2"
+									className="bg-gray-700 rounded-lg p-3 placeholder-white w-14"
+								/>
+							</div>
 							<select
-								defaultValue=""
+								defaultValue={match ? match?.team2 : ''}
 								name="team2"
-								className="bg-gray-700 rounded-lg p-3 placeholder-white"
+								className="bg-gray-700 rounded-lg p-3 placeholder-white w-full"
 							>
 								<option value="" disabled>
 									Away Team
 								</option>
 								{teams
-									.filter((team) => team.competition === competitionSelected)
+									.filter((team) =>
+										match
+											? team.competition === match.competition
+											: team.competition === competitionSelected,
+									)
 									.map((team) => (
-										<option key={team._id} value={team.team}>
+										<option key={team.team} value={team.team}>
 											{team.team}
 										</option>
 									))}
@@ -109,6 +150,7 @@ export const AddMatchForm = ({ teams, error, addMatch }: AddMatchForm) => {
 								/> */}
 
 						<input
+							defaultValue={match ? match?.where : ''}
 							type="text"
 							placeholder="Where did you watch it?"
 							name="where"
@@ -116,6 +158,7 @@ export const AddMatchForm = ({ teams, error, addMatch }: AddMatchForm) => {
 						/>
 
 						<input
+							defaultValue={match ? match?.rating : 5}
 							type="number"
 							placeholder="Rating (0-10)"
 							name="rating"

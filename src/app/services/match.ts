@@ -23,6 +23,7 @@ async function deleteMatch(id: string) {
 }
 
 async function getTeams(competition?: string) {
+	console.log(competition);
 	const res = await axios.get(`/api/teams`);
 	return res.data;
 }

@@ -1,5 +1,3 @@
-import React from 'react';
-
 const nameMap: Record<string, string> = {
 	premier: 'Premier League',
 	champions: 'UEFA Champions League',

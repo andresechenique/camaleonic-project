@@ -21,12 +21,6 @@ interface UserWithFullname {
 	email: string;
 }
 
-// Callback session typing
-interface SessionParams {
-	session: Session;
-	token: Token;
-}
-
 const handler = NextAuth({
 	providers: [
 		CredentialsProvider({
