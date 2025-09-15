@@ -1,7 +1,7 @@
 import { AddMatchParams, Match } from '@/interfaces';
 import axios from 'axios';
 
-async function getMatches(date: Date | undefined, id?: string) {
+async function getMatches(date?: Date | undefined, id?: string) {
 	const res = await axios.get(`/api/matches?userId=${id}&date=${date}`);
 	return res.data;
 }

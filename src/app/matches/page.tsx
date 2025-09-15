@@ -15,7 +15,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Matches() {
 	const [date, setDate] = useState<Date | undefined>(new Date());
-	const [matches, setMatches] = useState<Match[]>([]);
+	const [matches, setMatches] = useState<Match[] | undefined>();
 	const [matchToEdit, setMatchToEdit] = useState<Match>();
 	const [matchDetail, setMatchDetail] = useState<Match>();
 	const [teams, setTeams] = useState<Team[]>([]);
@@ -23,17 +23,6 @@ export default function Matches() {
 	const [isOpenForm, setIsOpenForm] = useState<boolean>(false);
 	const [isOpenDetail, setIsOpenDetail] = useState<boolean>(false);
 	const { data: session } = useSession();
-
-	useEffect(() => {
-		const getMatches = async (date: Date, id: string) => {
-			console.log(date, id);
-			const res = await MatchesService.getMatches(date, session?.user.id);
-			setMatches(res);
-		};
-
-		if (!date || !session?.user.id) return;
-		getMatches(date, session.user.id);
-	}, [date, session?.user.id]);
 
 	useEffect(() => {
 		const getTeams = async () => {
@@ -47,6 +36,16 @@ export default function Matches() {
 		if (!matchDetail) return;
 		setIsOpenDetail(true);
 	}, [matchDetail]);
+
+	useEffect(() => {
+		const getMatches = async (date: Date, id: string) => {
+			const res = await MatchesService.getMatches(date, session?.user.id);
+			setMatches(res);
+		};
+
+		if (!date || !session?.user.id) return;
+		getMatches(date, session.user.id);
+	}, [date, session?.user.id]);
 
 	const addMatch = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -67,7 +66,8 @@ export default function Matches() {
 				createdBy: session?.user.id,
 			};
 			const res = await MatchesService.addMatch(params);
-			setMatches((prev) => [res, ...prev]);
+			if (!matches) return;
+			setMatches((prev) => [res, ...(prev ?? [])]);
 			handleCloseForm();
 		} catch (error) {
 			if (error instanceof AxiosError) {
@@ -97,7 +97,7 @@ export default function Matches() {
 				_id: matchToEdit?._id,
 			};
 			const res = await MatchesService.updateMatch(params);
-			setMatches((prev) => prev.map((m) => (m._id === res._id ? res : m)));
+			setMatches((prev) => prev?.map((m) => (m._id === res._id ? res : m)));
 			setIsOpenDetail(false);
 			handleCloseForm();
 		} catch (error) {
@@ -111,7 +111,7 @@ export default function Matches() {
 		if (!matchDetail) return;
 		await MatchesService.deleteMatch(id);
 		setIsOpenDetail(false);
-		setMatches((prev) => prev.filter((m) => m._id !== matchDetail._id));
+		setMatches((prev) => prev?.filter((m) => m._id !== matchDetail._id));
 	};
 
 	const openMatchEdit = (match: Match) => {
@@ -163,18 +163,27 @@ export default function Matches() {
 						Serie A
 					</Toggle>
 				</div> */}
-			{matches.length > 0
-				? matches.map((match) => (
-						<div className="col-span-12" key={match._id}>
-							<MatchItem match={match} setMatchDetail={setMatchDetail} />
-						</div>
-					))
-				: Array.from({ length: 4 }).map((_, i) => (
-						<Skeleton
-							key={i}
-							className="h-[84px] w-full rounded-xl col-span-12"
-						/>
-					))}
+			{!matches ? (
+				Array.from({ length: 4 }).map((_, i) => (
+					<Skeleton
+						key={i}
+						className="h-[84px] w-full rounded-xl col-span-12"
+					/>
+				))
+			) : matches.length > 0 ? (
+				matches.map((match) => (
+					<div className="col-span-12" key={match._id}>
+						<MatchItem match={match} setMatchDetail={setMatchDetail} />
+					</div>
+				))
+			) : (
+				<div className="col-span-12 text-center row-span-4 text-3xl flex flex-col gap-2 justify-center">
+					<p className="font-semibold">No matches registered</p>
+					<p className="text-xl">
+						register your first match to visualize it here
+					</p>
+				</div>
+			)}
 			{matchDetail && (
 				<Dialog
 					open={isOpenDetail}

@@ -77,7 +77,7 @@ const handler = NextAuth({
 		},
 	},
 	pages: {
-		signIn: '/',
+		signIn: '/login',
 	},
 } satisfies NextAuthOptions);
 
