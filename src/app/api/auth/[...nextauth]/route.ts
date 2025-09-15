@@ -5,7 +5,6 @@ import User from '@/models/user';
 import bcrypt from 'bcryptjs';
 import { JWT } from 'next-auth/jwt';
 
-// Extendemos el JWT para incluir el usuario
 interface Token extends JWT {
 	user?: {
 		id: string;
@@ -14,7 +13,6 @@ interface Token extends JWT {
 	};
 }
 
-// Interface de usuario retornado por authorize
 interface UserWithFullname {
 	id: string;
 	fullname: string;
@@ -74,9 +72,12 @@ const handler = NextAuth({
 			}
 			return session;
 		},
+		async redirect({ url, baseUrl }) {
+			return baseUrl;
+		},
 	},
 	pages: {
-		signIn: '/login',
+		signIn: '/',
 	},
 } satisfies NextAuthOptions);
 

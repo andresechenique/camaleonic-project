@@ -2,13 +2,13 @@
 import { AuthService } from '@/app/services';
 import { AxiosError } from 'axios';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 
 export default function Register() {
 	const [error, setError] = useState<string>();
 	const [loading, setLoading] = useState<boolean>(false);
-	const router = useRouter();
+	// const router = useRouter();
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -28,7 +28,6 @@ export default function Register() {
 			});
 
 			// if (res?.ok) return router.push('/');
-			setError('Authentication failed.');
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				setError(error.response?.data.message);
