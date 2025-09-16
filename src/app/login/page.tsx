@@ -1,13 +1,13 @@
 'use client';
 import { AxiosError } from 'axios';
 import { signIn } from 'next-auth/react';
-// import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 export default function Login() {
 	const [error, setError] = useState<string>();
 	const [loading, setLoading] = useState<boolean>(false);
-	// const router = useRouter();
+	const [showPassword, setShowPassword] = useState(false);
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -22,7 +22,6 @@ export default function Login() {
 				password,
 				redirect: true,
 			});
-
 			// if (res?.ok) return router.push('/');
 		} catch (error) {
 			if (error instanceof AxiosError) {
@@ -50,13 +49,26 @@ export default function Login() {
 						className="bg-gray-700 rounded-lg p-3 placeholder-white min-w-full"
 						disabled={loading}
 					/>
-					<input
-						type="password"
-						placeholder="Password"
-						name="password"
-						className="bg-gray-700 rounded-lg p-3 placeholder-white min-w-full"
-						disabled={loading}
-					/>
+
+					{/* Password Input con icono */}
+					<div className="relative w-full">
+						<input
+							type={showPassword ? 'text' : 'password'}
+							placeholder="Password"
+							name="password"
+							className="bg-gray-700 rounded-lg p-3 placeholder-white min-w-full pr-10"
+							disabled={loading}
+						/>
+						<button
+							type="button"
+							className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 hover:text-white"
+							onClick={() => setShowPassword((prev) => !prev)}
+							tabIndex={-1}
+						>
+							{showPassword ? <FaEyeSlash /> : <FaEye />}
+						</button>
+					</div>
+
 					{error && <div className="text-red-400 text-xs">{error}</div>}
 					<button
 						type="submit"

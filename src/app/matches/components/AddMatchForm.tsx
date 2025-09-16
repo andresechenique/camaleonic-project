@@ -14,6 +14,7 @@ import {
 	useEffect,
 	useState,
 } from 'react';
+import StarRating from './StarRating';
 
 interface AddMatchForm {
 	teams: Team[];
@@ -160,15 +161,9 @@ export const AddMatchForm = ({
 							name="where"
 							className="bg-gray-700 rounded-lg p-3 placeholder-white"
 						/>{' '}
-						<input
-							defaultValue={match ? match?.rating : 5}
-							type="number"
-							placeholder="Rating (0-10)"
-							name="rating"
-							min={0}
-							max={10}
-							className="bg-gray-700 rounded-lg p-3 placeholder-white"
-						/>{' '}
+						<div className="mx-auto">
+							<StarRating />
+						</div>
 						{error && <div className=" text-red-400 text-xs">{error}</div>}{' '}
 						<button type="submit" className="px-6 py-2 bg-blue-800 rounded-lg">
 							{' '}

@@ -2,6 +2,7 @@
 import { useRouter, usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import clsx from 'clsx';
+import { GoSignOut } from 'react-icons/go';
 
 export default function Nav() {
 	const router = useRouter();
@@ -33,7 +34,12 @@ export default function Nav() {
 					{navLink('Dashboard', '/dashboard')}
 					{navLink('Matches', '/matches')}
 					{navLink('Topics', '/topics')}
-					{navLink('Signout', '/api/auth/signout')}
+					<div
+						className="cursor-pointer text-red-500 hover:text-red-700"
+						onClick={() => router.push('/api/auth/signout')}
+					>
+						<GoSignOut size={18} />
+					</div>
 				</div>
 			) : (
 				<div className="flex justify-between items-center gap-8">
