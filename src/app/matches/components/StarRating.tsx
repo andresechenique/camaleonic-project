@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 
 interface StarRatingProps {
@@ -13,6 +13,11 @@ export default function StarRating({
 	onChange,
 }: StarRatingProps) {
 	const [rating, setRating] = useState(initialValue); // 0-10 en incrementos de 0.5
+
+	// 👇 sincroniza el rating cuando cambia initialValue (por ejemplo, al editar un item)
+	useEffect(() => {
+		setRating(initialValue);
+	}, [initialValue]);
 
 	const handleClick = (value: number) => {
 		setRating(value);

@@ -162,7 +162,7 @@ export const AddMatchForm = ({
 							className="bg-gray-700 rounded-lg p-3 placeholder-white"
 						/>{' '}
 						<div className="mx-auto">
-							<StarRating />
+							<StarRating initialValue={match ? match.rating : 5} />
 						</div>
 						{error && <div className=" text-red-400 text-xs">{error}</div>}{' '}
 						<button type="submit" className="px-6 py-2 bg-blue-800 rounded-lg">
