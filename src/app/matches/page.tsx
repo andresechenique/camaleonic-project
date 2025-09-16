@@ -1,16 +1,17 @@
 'use client';
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import NameMapper from '@/components/NameMapper';
+import { FormEvent, useEffect, useState } from 'react';
 import { Pencil, Trash2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { FormEvent, useEffect, useState } from 'react';
-import { Match, Team } from '@/interfaces';
-import { MatchesService } from '../services/match';
 import { AxiosError } from 'axios';
-import { MatchItem, AddMatchForm, DatePicker } from './components';
-import IconMapper from '@/components/IconMapper';
-import Rating from '@/components/Register';
+/////////////////////////////////////////////////////////////////////////////
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Match, Team } from '@/interfaces';
+import { MatchesService } from '@/app/services';
+import { MatchItem, AddMatchForm, DatePicker } from './components';
+import NameMapper from '@/components/NameMapper';
+import IconMapper from '@/components/IconMapper';
+import Rating from '@/components/Rating';
 
 export default function Matches() {
 	const [date, setDate] = useState<Date | undefined>(new Date());

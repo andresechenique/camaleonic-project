@@ -1,9 +1,10 @@
 'use client';
-import { AuthService } from '@/app/services';
 import { AxiosError } from 'axios';
 import { signIn } from 'next-auth/react';
 import { FormEvent, useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+///////////////////////////////////////////////////////////
+import { AuthService } from '@/app/services';
 
 export default function Register() {
 	const [error, setError] = useState<string>();
@@ -48,7 +49,7 @@ export default function Register() {
 	};
 
 	return (
-		<div className="col-start-3 col-end-11 lg:col-start-5 lg:col-end-9">
+		<div className="col-start-2 col-end-12 lg:col-start-5 lg:col-end-9">
 			<form
 				className="my-4 bg-gray-800 px-8 py-6 rounded-lg border border-gray-600"
 				onSubmit={handleSubmit}
@@ -72,7 +73,7 @@ export default function Register() {
 					/>
 
 					{/* Password */}
-					<div className="relative w-full">
+					<div className="relative min-w-full">
 						<input
 							type={showPassword ? 'text' : 'password'}
 							placeholder="Password"
@@ -93,7 +94,7 @@ export default function Register() {
 					</div>
 
 					{/* Confirm Password */}
-					<div className="relative w-full">
+					<div className="relative min-w-full">
 						<input
 							type={showConfirmPassword ? 'text' : 'password'}
 							placeholder="Confirm Password"

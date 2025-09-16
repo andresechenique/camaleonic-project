@@ -1,9 +1,8 @@
-import Rating from '@/components/Register';
+import { Dispatch, SetStateAction } from 'react';
+//////////////////////////////////////////////////////////////
+import Rating from '@/components/Rating';
 import { Match } from '@/interfaces';
 import IconMapper from '@/components/IconMapper';
-
-import { Dispatch, SetStateAction } from 'react';
-
 interface MatchItemParams {
 	match: Match;
 	setMatchDetail: Dispatch<SetStateAction<Match | undefined>>;

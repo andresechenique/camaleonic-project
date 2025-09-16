@@ -1,6 +1,4 @@
 'use client';
-import { Post, User, Todo, Photo, Topic, Match } from '@/interfaces';
-import { DataService, TopicService } from '@/app/services';
 import { useEffect, useState } from 'react';
 import { Doughnut, Bar, Line } from 'react-chartjs-2';
 import {
@@ -16,11 +14,14 @@ import {
 	PointElement,
 	LineElement,
 } from 'chart.js';
-import { MatchesService } from '../services/match';
 import { useSession } from 'next-auth/react';
+///////////////////////////////////////////////////////////////////////////////
+import { Post, User, Todo, Photo, Topic, Match } from '@/interfaces';
+import { DataService, TopicService } from '@/app/services';
+import { MatchesService } from '../services/match';
 import { nameMap } from '../mappers/nameMap';
 import { Skeleton } from '@/components/ui/skeleton';
-import Rating from '@/components/Register';
+import Rating from '@/components/Rating';
 import IconMapper from '@/components/IconMapper';
 
 ChartJS.register(

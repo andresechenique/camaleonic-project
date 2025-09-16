@@ -35,7 +35,7 @@ export default function Login() {
 	};
 
 	return (
-		<div className="col-start-3 col-end-11 lg:col-start-5 lg:col-end-9">
+		<div className="col-start-2 col-end-12 lg:col-start-5 lg:col-end-9">
 			<form
 				className="my-4 bg-gray-800 px-8 py-6 rounded-lg border border-gray-600"
 				onSubmit={handleSubmit}
@@ -50,13 +50,12 @@ export default function Login() {
 						disabled={loading}
 					/>
 
-					{/* Password Input con icono */}
-					<div className="relative w-full">
+					<div className="relative min-w-full">
 						<input
 							type={showPassword ? 'text' : 'password'}
 							placeholder="Password"
 							name="password"
-							className="bg-gray-700 rounded-lg p-3 placeholder-white min-w-full pr-10"
+							className="bg-gray-700 rounded-lg p-3 placeholder-white pr-10 min-w-full "
 							disabled={loading}
 						/>
 						<button
