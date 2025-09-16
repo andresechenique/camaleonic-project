@@ -20,6 +20,8 @@ import { MatchesService } from '../services/match';
 import { useSession } from 'next-auth/react';
 import { nameMap } from '../mappers/nameMap';
 import { Skeleton } from '@/components/ui/skeleton';
+import Rating from '@/components/Register';
+import IconMapper from '@/components/IconMapper';
 
 ChartJS.register(
 	ArcElement,
@@ -196,6 +198,48 @@ export default function Dashboard() {
 		],
 	};
 
+	const teams = new Set<string>();
+	matches.forEach((m) => {
+		teams.add(m.team1);
+		teams.add(m.team2);
+	});
+
+	// total goals
+	const totalGoals = matches.reduce(
+		(acc, m) => acc + m.scoreTeam1 + m.scoreTeam2,
+		0,
+	);
+	const goalsPerGame = totalGoals / matches.length;
+
+	// avg rating
+	const avgRating =
+		matches.reduce((acc, m) => acc + (m.rating ?? 0), 0) / matches.length;
+
+	// rating per competition
+	const ratingsByCompetition: Record<string, { sum: number; count: number }> =
+		{};
+	matches.forEach((m) => {
+		if (!ratingsByCompetition[m.competition]) {
+			ratingsByCompetition[m.competition] = { sum: 0, count: 0 };
+		}
+		ratingsByCompetition[m.competition].sum += m.rating ?? 0;
+		ratingsByCompetition[m.competition].count += 1;
+	});
+	const avgRatingPerCompetition = Object.entries(ratingsByCompetition).map(
+		([comp, { sum, count }]) => ({
+			competition: comp,
+			avg: sum / count,
+		}),
+	);
+
+	// where watched
+	const whereCount: Record<string, number> = {};
+	matches.forEach((m) => {
+		if (m.where) {
+			whereCount[m.where] = (whereCount[m.where] ?? 0) + 1;
+		}
+	});
+
 	if (loading)
 		return (
 			<div className="col-span-12 grid grid-cols-12 gap-4 p-4">
@@ -210,26 +254,43 @@ export default function Dashboard() {
 	return (
 		<div className="col-span-12 grid grid-cols-12 gap-4 p-4">
 			<div className="col-span-12 md:col-span-6 bg-gray-700 rounded-lg p-2 border border-gray-500">
-				<h2 className="p-2 text-xl">Matches per Competition</h2>
-				<div className="max-h-80 flex justify-center py-4">
-					{matches.length != 0 ? (
-						<Doughnut
-							data={dataMatches}
-							options={{
-								maintainAspectRatio: false,
-								cutout: '80%',
-								plugins: {
-									legend: {
-										display: false,
+				{matches.length === 0 ? (
+					<p className="text-gray-400 text-center italic py-4">
+						No matches yet
+					</p>
+				) : (
+					<>
+						<h2 className="p-2 text-xl mb-2">Matches Watched per Team</h2>
+						<div className="max-h-80 flex justify-center py-4">
+							<Bar
+								data={dataTeams}
+								options={{
+									responsive: true,
+									maintainAspectRatio: false,
+									plugins: {
+										legend: { display: false },
+										title: { display: false, text: 'Matches Watched per Team' },
 									},
-								},
-							}}
-							style={{ width: '100%', height: '100%' }}
-						/>
-					) : (
-						<p className="pt-8">Add your first match to see this graph</p>
-					)}
-				</div>
+									scales: {
+										y: {
+											beginAtZero: true,
+											ticks: {
+												color: '#fff',
+												stepSize: 1, // ensures whole numbers only
+											},
+										},
+										x: {
+											ticks: {
+												color: '#fff',
+											},
+										},
+									},
+								}}
+								style={{ width: '100%', height: '100%' }}
+							/>
+						</div>
+					</>
+				)}
 			</div>
 			<div className="col-span-12 md:col-span-6 bg-gray-700 rounded-lg p-2 border border-gray-500">
 				<h2 className="p-2 text-xl">Post over time</h2>
@@ -311,59 +372,114 @@ export default function Dashboard() {
 					/>
 				</div>
 			</div>
-			<div className="col-span-12 md:col-span-4 bg-gray-700 rounded-lg p-2 border border-gray-500 ">
-				<h2 className="p-2 text-xl">Todo Completion %</h2>
-				<div className="min-h-[200px] flex justify-center py-4">
-					<Doughnut
-						data={dataTodos}
-						options={{
-							cutout: '60%',
-							maintainAspectRatio: false,
+			<div className="col-span-12 md:col-span-4 flex flex-col gap-4">
+				<div className="flex flex-col gap-2 py-4 text-sm text-gray-200 bg-gray-700 rounded-lg border border-gray-500 md:h-full">
+					{matches.length === 0 ? (
+						<p className="text-gray-400 text-center italic">No matches yet</p>
+					) : (
+						<>
+							<h3 className="text-sm font-semibold text-gray-100 text-center">
+								Total Watched
+							</h3>
 
-							plugins: {
-								legend: {
-									display: false,
-								},
-							},
-						}}
-						style={{ width: '100%', height: '100%' }}
-					/>
+							<div className="grid grid-cols-4 gap-4 text-center">
+								<div className=" py-3  ">
+									<p className="text-xs text-gray-400">Teams</p>
+									<p className="text-lg font-bold">{teams.size}</p>
+								</div>
+								<div className=" py-3 ">
+									<p className="text-xs text-gray-400">Goals</p>
+									<p className="text-lg font-bold">{totalGoals}</p>
+								</div>
+								<div className=" py-3 ">
+									<p className="text-xs text-gray-400">Goals/Game</p>
+									<p className="text-lg font-bold">{goalsPerGame.toFixed(2)}</p>
+								</div>
+								<div className=" py-3 ">
+									<p className="text-xs text-gray-400">Avg Rating</p>
+									<p className="text-lg font-bold">{avgRating.toFixed(2)}</p>
+								</div>
+							</div>
+						</>
+					)}
+				</div>
+				<div className="flex flex-col gap-8 py-4 text-sm text-gray-200 bg-gray-700 rounded-lg border border-gray-500 md:h-full">
+					{matches.length === 0 ? (
+						<p className="text-gray-400 text-center italic">No matches yet</p>
+					) : (
+						avgRatingPerCompetition.length > 0 && (
+							<div>
+								<h3 className="text-md font-semibold text-gray-100 mb-4 text-center">
+									Rating per Competition
+								</h3>
+								<div className="grid grid-cols-4 gap-2 justify-center">
+									{avgRatingPerCompetition.map((r) => (
+										<span
+											key={r.competition}
+											className="col-span-2 xl:col-span-1 bg-gray-700 p-2 text-xs lg:text-md flex items-center gap-2 justify-center"
+										>
+											{<IconMapper name={r.competition} />}:{' '}
+											<Rating rating={Number(r.avg.toFixed(0))} />
+										</span>
+									))}
+								</div>
+							</div>
+						)
+					)}
+				</div>
+				<div className="flex flex-col gap-8 py-4 text-sm text-gray-200 bg-gray-700 rounded-lg border border-gray-500 md:h-full">
+					{matches.length === 0 ? (
+						<p className="text-gray-400 text-center italic">No matches yet</p>
+					) : (
+						Object.keys(whereCount).length > 0 && (
+							<div>
+								<h3 className="text-md font-semibold text-gray-100 mb-4 text-center">
+									Where have you watched the most games?
+								</h3>
+								<ul className="space-y-1 text-sm px-4">
+									{Object.entries(whereCount)
+										.sort((a, b) => b[1] - a[1])
+										.slice(0, 1)
+										.map(([place, count]) => (
+											<li
+												key={place}
+												className="flex justify-between bg-gray-700 px-3 py-2 rounded-lg"
+											>
+												<span>{place}</span>
+												<span className="font-bold">{count}</span>
+											</li>
+										))}
+								</ul>
+							</div>
+						)
+					)}
 				</div>
 			</div>
 			<div className="col-span-12 md:col-span-4 bg-gray-700 rounded-lg p-2 border border-gray-500">
-				<h2 className="p-2 text-xl mb-2">Matches Watched per Team</h2>
-				<div className="max-h-80 flex justify-center py-4">
-					{matches.length != 0 ? (
-						<Bar
-							data={dataTeams}
-							options={{
-								responsive: true,
-								maintainAspectRatio: false,
-								plugins: {
-									legend: { display: false },
-									title: { display: false, text: 'Matches Watched per Team' },
-								},
-								scales: {
-									y: {
-										beginAtZero: true,
-										ticks: {
-											color: '#fff',
-											stepSize: 1, // ensures whole numbers only
+				{matches.length === 0 ? (
+					<p className="text-gray-400 text-center italic py-4">
+						No matches yet
+					</p>
+				) : (
+					<>
+						<h2 className="p-2 text-xl">Matches per Competition</h2>
+						<div className="max-h-80 flex justify-center py-4">
+							<Doughnut
+								data={dataMatches}
+								options={{
+									maintainAspectRatio: false,
+									cutout: '80%',
+									plugins: {
+										legend: {
+											display: false,
 										},
 									},
-									x: {
-										ticks: {
-											color: '#fff',
-										},
-									},
-								},
-							}}
-							style={{ width: '100%', height: '100%' }}
-						/>
-					) : (
-						<p className="pt-8">Add your first match to see this graph</p>
-					)}
-				</div>
+								}}
+								style={{ width: '100%', height: '100%' }}
+							/>
+						</div>
+					</>
+				)}
 			</div>
 		</div>
 	);
