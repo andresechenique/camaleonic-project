@@ -164,7 +164,7 @@ export default function Matches() {
 					</Toggle>
 				</div> */}
 			{!matches ? (
-				Array.from({ length: 4 }).map((_, i) => (
+				Array.from({ length: 6 }).map((_, i) => (
 					<Skeleton
 						key={i}
 						className="h-[84px] w-full rounded-xl col-span-12"

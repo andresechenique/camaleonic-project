@@ -245,7 +245,7 @@ export default function Topics() {
 								</div>
 							</div>
 						))
-					: Array.from({ length: 4 }).map((_, i) => (
+					: Array.from({ length: 6 }).map((_, i) => (
 							<Skeleton key={i} className="h-[84px] w-full rounded-lg" />
 						))}
 			</div>
