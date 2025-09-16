@@ -12,6 +12,11 @@ const font = Source_Code_Pro({
 export const metadata: Metadata = {
 	title: 'FutCalendar',
 	description: 'A calendar to register for your football matches',
+	icons: {
+		icon: '/favicon/favicon.ico',
+		apple: '/favicon/apple-touch-icon.png',
+		shortcut: '/favicon/favicon-32x32.png',
+	},
 };
 
 export default function RootLayout({
@@ -21,6 +26,26 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
+			<head>
+				<link rel="icon" href="/favicon/favicon.ico" />
+				<link
+					rel="apple-touch-icon"
+					sizes="180x180"
+					href="/favicon/apple-touch-icon.png"
+				/>
+				<link
+					rel="icon"
+					type="image/png"
+					sizes="32x32"
+					href="/favicon/favicon-32x32.png"
+				/>
+				<link
+					rel="icon"
+					type="image/png"
+					sizes="16x16"
+					href="/favicon/favicon-16x16.png"
+				/>
+			</head>
 			<body className={`${font.variable} antialiased text-white`}>
 				<Providers>
 					<Nav />
