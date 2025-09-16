@@ -22,19 +22,25 @@ export default function Nav() {
 	);
 
 	return (
-		<div className="bg-black min-h-[64px] grid grid-cols-12 items-center text-center">
-			<img
-				alt="logo"
-				src={'https://camaleonicanalytics.com/assets/frontend/images/logo.png'}
-				className="col-span-2 text-left pl-4 font-semibold text-lg max-h-[40px]"
-			/>
-			{status === 'authenticated' && navLink('Home', '/')}
-			{status === 'authenticated' && navLink('Dashboard', '/dashboard')}
-			{status === 'authenticated' && navLink('Matches', '/matches')}
-			{status === 'authenticated' && navLink('Topics', '/topics')}
-			{status === 'authenticated'
-				? navLink('Signout', '/api/auth/signout')
-				: navLink('Signin', '/login')}
+		<div className="bg-black min-h-[64px] flex justify-between items-center text-center px-4">
+			<div className="text-left font-semibold text-lg flex items-center gap-2">
+				<img alt="logo" src={'/logo.png'} className="max-h-[40px]" />
+				<p className="hidden md:block">FutCalendar</p>
+			</div>
+			{status === 'authenticated' ? (
+				<div className="flex justify-between items-center gap-4 md:gap-8">
+					{navLink('Home', '/')}
+					{navLink('Dashboard', '/dashboard')}
+					{navLink('Matches', '/matches')}
+					{navLink('Topics', '/topics')}
+					{navLink('Signout', '/api/auth/signout')}
+				</div>
+			) : (
+				<div className="flex justify-between items-center gap-8">
+					{navLink('Home', '/')}
+					{navLink('Signin', '/login')}
+				</div>
+			)}
 		</div>
 	);
 }
