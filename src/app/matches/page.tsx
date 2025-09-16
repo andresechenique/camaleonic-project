@@ -1,5 +1,4 @@
 'use client';
-// import { Toggle } from '@/components/ui/toggle';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import NameMapper from '@/components/NameMapper';
 import { Pencil, Trash2 } from 'lucide-react';
@@ -120,6 +119,7 @@ export default function Matches() {
 
 	const handleCloseForm = () => {
 		setIsOpenForm(!isOpenForm);
+		setError('');
 		setMatchToEdit(undefined);
 	};
 
@@ -187,7 +187,10 @@ export default function Matches() {
 			{matchDetail && (
 				<Dialog
 					open={isOpenDetail}
-					onOpenChange={() => setIsOpenDetail(!isOpenDetail)}
+					onOpenChange={() => {
+						setIsOpenDetail(!isOpenDetail);
+						setMatchDetail(undefined);
+					}}
 				>
 					<DialogContent className="max-w-xs sm:max-w-md lg:max-w-2xl">
 						<DialogTitle>

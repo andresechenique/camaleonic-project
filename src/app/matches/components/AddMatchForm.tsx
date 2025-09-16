@@ -54,10 +54,10 @@ export const AddMatchForm = ({
 				<DialogHeader>
 					<DialogTitle>{match ? 'Edit match' : 'Add match'}</DialogTitle>
 					<form
-						className="flex flex-col gap-5 pt-6 w-full max-w-2xl mx-auto"
+						className="flex flex-col gap-4 pt-4"
 						onSubmit={match ? editMatch : addMatch}
 					>
-						{/* Fecha */}
+						{' '}
 						<input
 							type="date"
 							placeholder="Date"
@@ -67,36 +67,36 @@ export const AddMatchForm = ({
 									: new Date().toISOString().split('T')[0]
 							}
 							name="date"
-							className="w-full bg-gray-700 text-white rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition"
-						/>
-
-						{/* Competición */}
+							className="bg-gray-700 rounded-lg p-3 placeholder-white"
+						/>{' '}
 						<select
 							name="competition"
-							className="w-full bg-gray-700 text-white rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition appearance-none"
+							className="bg-gray-700 rounded-lg p-3 text-white appearance-none"
 							defaultValue={match ? match.competition : ''}
 							onChange={(e) => setCompetitionSelected(e.target.value)}
 						>
+							{' '}
 							<option value="" disabled>
-								Competition
-							</option>
-							<option value="champions">UEFA Champions League</option>
-							<option value="laliga">La Liga</option>
-							<option value="seriea">Serie A</option>
-							<option value="premier">Premier League</option>
-						</select>
-
-						{/* Equipos y marcador */}
-						<div className="flex flex-col md:flex-row gap-4 items-center w-full">
-							{/* Equipo local */}
+								{' '}
+								Competition{' '}
+							</option>{' '}
+							<option value="champions">UEFA Champions League</option>{' '}
+							<option value="laliga">La Liga</option>{' '}
+							<option value="seriea">Serie A</option>{' '}
+							<option value="premier">Premier League</option>{' '}
+						</select>{' '}
+						<div className="flex gap-4 flex-col md:flex-row justify-between items-center">
+							{' '}
 							<select
 								defaultValue={match ? match?.team1 : ''}
 								name="team1"
-								className="flex-1 bg-gray-700 text-white rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition appearance-none"
+								className="bg-gray-700 rounded-lg p-3 placeholder-white w-full appearance-none"
 							>
+								{' '}
 								<option value="" disabled>
-									Home Team
-								</option>
+									{' '}
+									Home Team{' '}
+								</option>{' '}
 								{teams
 									.filter((team) =>
 										match
@@ -105,39 +105,39 @@ export const AddMatchForm = ({
 									)
 									.map((team) => (
 										<option key={team.team} value={team.team}>
-											{team.team}
+											{' '}
+											{team.team}{' '}
 										</option>
-									))}
-							</select>
-
-							{/* Marcador */}
-							<div className="flex items-center justify-center gap-3">
+									))}{' '}
+							</select>{' '}
+							<div className="flex items-center justify-around w-full md:w-auto gap-2">
+								{' '}
 								<input
 									defaultValue={match ? match?.scoreTeam1 : 0}
 									type="number"
 									placeholder="0"
 									name="scoreTeam1"
-									className="w-16 bg-gray-700 text-white rounded-xl p-3 text-center focus:ring-2 focus:ring-blue-500 outline-none transition"
-								/>
-								<span className="text-white font-semibold">VS</span>
+									className="bg-gray-700 rounded-lg p-3 placeholder-white w-14"
+								/>{' '}
+								<p>VS.</p>{' '}
 								<input
 									defaultValue={match ? match?.scoreTeam2 : 0}
 									type="number"
 									placeholder="0"
 									name="scoreTeam2"
-									className="w-16 bg-gray-700 text-white rounded-xl p-3 text-center focus:ring-2 focus:ring-blue-500 outline-none transition"
-								/>
-							</div>
-
-							{/* Equipo visitante */}
+									className="bg-gray-700 rounded-lg p-3 placeholder-white w-14"
+								/>{' '}
+							</div>{' '}
 							<select
 								defaultValue={match ? match?.team2 : ''}
 								name="team2"
-								className="flex-1 bg-gray-700 text-white rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition appearance-none"
+								className="bg-gray-700 rounded-lg p-3 placeholder-white w-full appearance-none"
 							>
+								{' '}
 								<option value="" disabled>
-									Away Team
-								</option>
+									{' '}
+									Away Team{' '}
+								</option>{' '}
 								{teams
 									.filter((team) =>
 										match
@@ -146,22 +146,20 @@ export const AddMatchForm = ({
 									)
 									.map((team) => (
 										<option key={team.team} value={team.team}>
-											{team.team}
+											{' '}
+											{team.team}{' '}
 										</option>
-									))}
-							</select>
-						</div>
-
-						{/* Dónde lo viste */}
+									))}{' '}
+							</select>{' '}
+						</div>{' '}
+						{/* <input type="text" placeholder="Favorite Player" name="favPlayer" className="bg-gray-700 rounded-lg p-3 placeholder-white" /> */}{' '}
 						<input
 							defaultValue={match ? match?.where : ''}
 							type="text"
 							placeholder="Where did you watch it?"
 							name="where"
-							className="w-full bg-gray-700 text-white rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition"
-						/>
-
-						{/* Rating */}
+							className="bg-gray-700 rounded-lg p-3 placeholder-white"
+						/>{' '}
 						<input
 							defaultValue={match ? match?.rating : 5}
 							type="number"
@@ -169,19 +167,13 @@ export const AddMatchForm = ({
 							name="rating"
 							min={0}
 							max={10}
-							className="w-full bg-gray-700 text-white rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition"
-						/>
-
-						{/* Error */}
-						{error && <div className="text-red-400 text-sm">{error}</div>}
-
-						{/* Botón */}
-						<button
-							type="submit"
-							className="w-full md:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition"
-						>
-							{match ? 'Update Match' : 'Add Match'}
-						</button>
+							className="bg-gray-700 rounded-lg p-3 placeholder-white"
+						/>{' '}
+						{error && <div className=" text-red-400 text-xs">{error}</div>}{' '}
+						<button type="submit" className="px-6 py-2 bg-blue-800 rounded-lg">
+							{' '}
+							Add{' '}
+						</button>{' '}
 					</form>
 				</DialogHeader>
 			</DialogContent>

@@ -45,7 +45,7 @@ export default function Topics() {
 				formData.get('description'),
 				Number(formData.get('points')),
 			);
-			console.log(res);
+
 			setTopics((prev) => [...prev, res]);
 			setOpenCreate(false);
 		} catch (error) {
@@ -91,7 +91,13 @@ export default function Topics() {
 			<div className="flex items-center justify-between pb-4 min-h-[84px]">
 				<h2 className="text-4xl font-bold ">Topics</h2>
 				{/* Add Topic Dialog */}
-				<Dialog open={openCreate} onOpenChange={setOpenCreate}>
+				<Dialog
+					open={openCreate}
+					onOpenChange={() => {
+						setOpenCreate(!openCreate);
+						setError('');
+					}}
+				>
 					<DialogTrigger>
 						<Button className="bg-blue-600 p-3  hover:bg-blue-700 transition">
 							Add topic
@@ -162,9 +168,10 @@ export default function Topics() {
 								<div className="flex flex-col lg:flex-row gap-2 lg:gap-12 text-right">
 									<Dialog
 										open={openEditId === topic._id}
-										onOpenChange={(isOpen) =>
-											setOpenEditId(isOpen ? topic._id : null)
-										}
+										onOpenChange={(isOpen) => {
+											setOpenEditId(isOpen ? topic._id : null);
+											setError('');
+										}}
 									>
 										<DialogTrigger className="inline-block border-2 border-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition ">
 											<Pencil className="w-4 h-4" />
