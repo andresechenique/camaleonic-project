@@ -16,7 +16,6 @@ export default function Login() {
 		const formData = new FormData(e.currentTarget);
 		const email = formData.get('email');
 		const password = formData.get('password');
-		debugger;
 		try {
 			const res = await signIn('credentials', {
 				email,

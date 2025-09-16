@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import {
 	Dialog,
 	DialogContent,
@@ -44,8 +45,10 @@ export const AddMatchForm = ({
 
 	return (
 		<Dialog open={isOpen} onOpenChange={handleClose}>
-			<DialogTrigger className="bg-blue-600 text-white p-3 rounded hover:bg-blue-700 transition">
-				Add match
+			<DialogTrigger>
+				<Button className="bg-blue-600 p-3  hover:bg-blue-700 transition">
+					Add match
+				</Button>
 			</DialogTrigger>
 			<DialogContent className="bg-gray-800 text-white max-w-xs  md:max-w-2xl">
 				<DialogHeader>

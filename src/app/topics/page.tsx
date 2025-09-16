@@ -14,6 +14,7 @@ import {
 import { TopicService } from '@/app/services';
 import { Pencil, Trash2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
 
 export default function Topics() {
 	const [topics, setTopics] = useState<Topic[]>([]);
@@ -86,13 +87,15 @@ export default function Topics() {
 	};
 
 	return (
-		<div className="col-span-12 flex flex-col gap-4 p-4 text-white">
-			<div className="flex items-center justify-between">
+		<div className="col-span-12 flex flex-col gap-4 p-8 text-white">
+			<div className="flex items-center justify-between pb-4 min-h-[84px]">
 				<h2 className="text-4xl font-bold ">Topics</h2>
 				{/* Add Topic Dialog */}
 				<Dialog open={openCreate} onOpenChange={setOpenCreate}>
-					<DialogTrigger className="inline-block bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition">
-						Add Topic
+					<DialogTrigger>
+						<Button className="bg-blue-600 p-3  hover:bg-blue-700 transition">
+							Add topic
+						</Button>
 					</DialogTrigger>
 					<DialogContent className="bg-gray-800 text-white max-w-xs  md:max-w-2xl">
 						<DialogHeader>
@@ -128,7 +131,7 @@ export default function Topics() {
 					</DialogContent>
 				</Dialog>
 			</div>
-			<div className="flex flex-col gap-2 overflow-y-auto max-h-[calc(100svh_-_160px)] custom-scrollbar">
+			<div className="flex flex-col gap-4 overflow-y-auto max-h-[calc(100svh_-_160px)] custom-scrollbar">
 				<div className="p-4 rounded-lg text-gray-400 items-center justify-left hidden lg:flex">
 					<div className="flex flex-col w-full lg:flex-row gap-2 lg:gap-12">
 						<div className="w-36 lg:w-full">Title</div>
@@ -144,7 +147,7 @@ export default function Topics() {
 					? topics.map((topic) => (
 							<div
 								key={topic._id}
-								className="flex p-4 rounded-lg border border-gray-700 items-center justify-between min-h-[84px]"
+								className="flex p-4 rounded-lg border border-gray-700 items-center justify-between lg:min-h-[84px]"
 							>
 								<div className="flex flex-col w-full lg:flex-row gap-2 lg:gap-12">
 									<div className="w-36 lg:w-full">{topic.title}</div>

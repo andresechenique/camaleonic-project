@@ -19,6 +19,7 @@ import {
 import { MatchesService } from '../services/match';
 import { useSession } from 'next-auth/react';
 import { nameMap } from '../mappers/nameMap';
+import { Skeleton } from '@/components/ui/skeleton';
 
 ChartJS.register(
 	ArcElement,
@@ -38,7 +39,7 @@ export default function Dashboard() {
 	const [posts, setPosts] = useState<Post[]>([]);
 	const [topics, setTopics] = useState<Topic[]>([]);
 	const [todos, setTodos] = useState<Todo[]>([]);
-	const [photos, setPhotos] = useState<Photo[]>([]);
+	const [loading, setLoading] = useState<boolean>(true);
 	const { data: session } = useSession();
 
 	useEffect(() => {
@@ -50,11 +51,14 @@ export default function Dashboard() {
 	}, [session?.user.id]);
 
 	const getMatches = async () => {
+		setLoading(true);
 		try {
 			const res = await MatchesService.getMatches(new Date(), session?.user.id);
 			setMatches(res);
 		} catch (error) {
 			console.log(error);
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -192,24 +196,39 @@ export default function Dashboard() {
 		],
 	};
 
+	if (loading)
+		return (
+			<div className="col-span-12 grid grid-cols-12 gap-4 p-4">
+				<Skeleton className="col-span-12 md:col-span-6 rounded-lg p-2 bg-gray-600"></Skeleton>
+				<Skeleton className="col-span-12 md:col-span-6 rounded-lg p-2 bg-gray-600"></Skeleton>
+				<Skeleton className="col-span-12 md:col-span-4 rounded-lg p-2 bg-gray-600"></Skeleton>
+				<Skeleton className="col-span-12 md:col-span-4 rounded-lg p-2 bg-gray-600"></Skeleton>
+				<Skeleton className="col-span-12 md:col-span-4 rounded-lg p-2 bg-gray-600"></Skeleton>
+			</div>
+		);
+
 	return (
 		<div className="col-span-12 grid grid-cols-12 gap-4 p-4">
 			<div className="col-span-12 md:col-span-6 bg-gray-700 rounded-lg p-2 border border-gray-500">
 				<h2 className="p-2 text-xl">Matches per Competition</h2>
 				<div className="max-h-80 flex justify-center py-4">
-					<Doughnut
-						data={dataMatches}
-						options={{
-							maintainAspectRatio: false,
-							cutout: '80%',
-							plugins: {
-								legend: {
-									display: false,
+					{matches.length != 0 ? (
+						<Doughnut
+							data={dataMatches}
+							options={{
+								maintainAspectRatio: false,
+								cutout: '80%',
+								plugins: {
+									legend: {
+										display: false,
+									},
 								},
-							},
-						}}
-						style={{ width: '100%', height: '100%' }}
-					/>
+							}}
+							style={{ width: '100%', height: '100%' }}
+						/>
+					) : (
+						<p className="pt-8">Add your first match to see this graph</p>
+					)}
 				</div>
 			</div>
 			<div className="col-span-12 md:col-span-6 bg-gray-700 rounded-lg p-2 border border-gray-500">
@@ -314,32 +333,36 @@ export default function Dashboard() {
 			<div className="col-span-12 md:col-span-4 bg-gray-700 rounded-lg p-2 border border-gray-500">
 				<h2 className="p-2 text-xl mb-2">Matches Watched per Team</h2>
 				<div className="max-h-80 flex justify-center py-4">
-					<Bar
-						data={dataTeams}
-						options={{
-							responsive: true,
-							maintainAspectRatio: false,
-							plugins: {
-								legend: { display: false },
-								title: { display: false, text: 'Matches Watched per Team' },
-							},
-							scales: {
-								y: {
-									beginAtZero: true,
-									ticks: {
-										color: '#fff',
-										stepSize: 1, // ensures whole numbers only
+					{matches.length != 0 ? (
+						<Bar
+							data={dataTeams}
+							options={{
+								responsive: true,
+								maintainAspectRatio: false,
+								plugins: {
+									legend: { display: false },
+									title: { display: false, text: 'Matches Watched per Team' },
+								},
+								scales: {
+									y: {
+										beginAtZero: true,
+										ticks: {
+											color: '#fff',
+											stepSize: 1, // ensures whole numbers only
+										},
+									},
+									x: {
+										ticks: {
+											color: '#fff',
+										},
 									},
 								},
-								x: {
-									ticks: {
-										color: '#fff',
-									},
-								},
-							},
-						}}
-						style={{ width: '100%', height: '100%' }}
-					/>
+							}}
+							style={{ width: '100%', height: '100%' }}
+						/>
+					) : (
+						<p className="pt-8">Add your first match to see this graph</p>
+					)}
 				</div>
 			</div>
 		</div>

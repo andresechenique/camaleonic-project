@@ -28,10 +28,10 @@ export default function Nav() {
 				src={'https://camaleonicanalytics.com/assets/frontend/images/logo.png'}
 				className="col-span-2 text-left pl-4 font-semibold text-lg max-h-[40px]"
 			/>
-			{navLink('Home', '/')}
-			{navLink('Dashboard', '/dashboard')}
-			{navLink('Topics', '/topics')}
-			{navLink('Matches', '/matches')}
+			{status === 'authenticated' && navLink('Home', '/')}
+			{status === 'authenticated' && navLink('Dashboard', '/dashboard')}
+			{status === 'authenticated' && navLink('Matches', '/matches')}
+			{status === 'authenticated' && navLink('Topics', '/topics')}
 			{status === 'authenticated'
 				? navLink('Signout', '/api/auth/signout')
 				: navLink('Signin', '/login')}

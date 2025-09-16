@@ -124,10 +124,10 @@ export default function Matches() {
 	};
 
 	return (
-		<div className="col-span-12 grid grid-cols-12 sm:grid-rows-7 gap-2 p-8">
-			<div className="col-span-12 flex flex-col sm:flex-row justify-between items-center gap-4 sm:min-h-[84px] pb-4">
+		<div className="col-span-12 flex flex-col gap-4 p-8">
+			<div className="flex flex-col sm:flex-row justify-between items-center gap-8 sm:min-h-[84px] pb-4">
 				<h2 className="text-4xl font-bold">Matches</h2>
-				<div className="flex gap-4 items-center">
+				<div className="flex gap-8 items-center">
 					<DatePicker date={date} setDate={setDate} />
 					<AddMatchForm
 						teams={teams}
@@ -172,12 +172,12 @@ export default function Matches() {
 				))
 			) : matches.length > 0 ? (
 				matches.map((match) => (
-					<div className="col-span-12" key={match._id}>
+					<div key={match._id}>
 						<MatchItem match={match} setMatchDetail={setMatchDetail} />
 					</div>
 				))
 			) : (
-				<div className="col-span-12 text-center row-span-4 text-3xl flex flex-col gap-2 justify-center">
+				<div className="text-center text-3xl flex flex-col gap-2 justify-center pt-16">
 					<p className="font-semibold">No matches registered</p>
 					<p className="text-xl">
 						register your first match to visualize it here
