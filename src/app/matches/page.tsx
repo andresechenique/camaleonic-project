@@ -39,7 +39,7 @@ export default function Matches() {
 
 	useEffect(() => {
 		const getMatches = async (date: Date, id: string) => {
-			const res = await MatchesService.getMatches(date, session?.user.id);
+			const res = await MatchesService.getMatches(date, id);
 			setMatches(res);
 		};
 
